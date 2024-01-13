@@ -1,0 +1,255 @@
+> RUST SETUP
+    > rustup : Manages Rust Installation
+
+    > Visual Studio Code : Coding Environment
+
+    > MSVC C++ Build Tools : Needed to build on Windows
+
+    > Steps:
+        -> Go To "https://www.rust-lang.org/"
+        -> Go To "Install" section
+        -> "DOWNLOAD RUSTUP-INIT.EXE (64-BIT)" download it
+        -> Open the file
+        -> Proceed to Download Visual Studio Installer ("Option 1") -> "MSVC" & "Windows 11 SDK"
+            -> Now, check on terminal: "cargo --version"
+            -> If it doesnt work, then follow the further steps:
+
+        -> After above Installation, AGAIN OPEN THE ".exe" file
+            -> Now, "Proceed with installation (default)"
+            -> After THIS Installation, RUST HAS BEEN SETUP ON YOUR PC. It'll work fine
+            -> Check "cargo --version" or "rustc --version"
+
+        -> Go to Directory of your choice.
+        -> run "cargo init rust_project_folder" -> this will create/initialize a rust project.
+
+> Integer Types
+    8 bits make up 1 byte size
+    "signed" means that the equal range extends to negative values as well
+
+    i8      signed integers with size of 8 bits (1 byte)          The range is from -128 to 127
+    u8      unsigned integers with a size of 8 bits               The range is from 0 to 255
+    example: Used for representing small numbers where a negative value is needed (i8), or when only non-negative values are needed (u8)
+
+    i16      signed integers with size of 16 bits (2 bytes)         The range is from -32768 to 32767
+    u16       unsigned integers with a size of 16 bits              The range is from 0 to 65535
+    example: Useful for scenarios where a larger range of values is needed, like representing temperature in a region
+
+    i32       signed integers with size of 32 bits (4 bytes)         The range is from -2147483648 to 2147483647
+    u32       unsigned integers with a size of 32 bits               The range is from 0 to 4294967295
+    example: used for representing counts, indices, or quantities in various applications
+
+    i64       signed integers with size of 64 bits (8 bytes)         The range is from -9223372036854775808 to 9223372036854775807
+    u64       unsigned integers with a size of 64 bits               The range is from 0 to 18446744073709551615
+
+    i128       signed integers with size of 128 bits (16 bytes)         
+    u128       unsigned integers with a size of 128 bits
+
+    "isize" and "usize"     These types are platform-dependent and have a size equal to the size of a memory pointer on the specific architecture
+    example: if you Compile the program on a 32-bit system, then isize,usize = i32,u32.
+
+> Variables
+    Used to assign data to a temporary memory location
+    Immutable by default, but can be mutable
+        - use of "immutable" variables increase the speed of your program, because it doesnt need to check if anything is changed or not
+        - use "mut" keyword to make them mutable
+
+    example:
+        let j = 3;
+        let mut var1 = "hello";
+
+> Functions
+    fn add(a: i32, b: i32) -> i32 {
+        a + b
+    }
+
+    SYNTAX: 
+    fn(keyword) <name of fn> (<parameters and their type>) -> <return type> {
+        program code
+    }
+
+> The println! macro
+
+    fn main() {
+        println!("hello");
+    }
+
+    In this code, "println!" is a macro for printing text to the console.
+    The "!" after println indicates that it's a macro, not a regular function.
+
+    ~> What is macro?
+        > a macro is a way to write code that writes other code during "compilation". It's a tool for automating repetitive tasks and making your code more concise.
+        > When you invoke the macro, it matches the template you've defined and generates code based on the provided values.
+
+        > "macro_rules!" is used to define declarative macros. (TO MAKE YOUR OWN MACRO)
+
+        > example:
+
+            macro_rules my_macro {
+                // pattern and replacement code go here
+                ($arg: expr) => {
+                    // macro logic using $arg
+                };
+            }
+
+        -> "my_macro" is the name of the macro.
+        -> "$arg:expr" is a pattern that matches an expression passed to the macro.
+        -> "=>" separates the pattern from the replacement code.
+        { /* code */ } contains the replacement code with "$arg" being replaced by the actual argument.
+
+        > How Macros Work?
+            -> Macros use pattern matching to match the structure of the code provided as arguments
+            -> The matched patterns are replaced with the specified code
+            -> The macro invocation expands to the generated code during the compilation phase
+        
+        > Why Use Macro?
+            -> Domain-Specific Languages (DSLs):
+                Macros enable the creation of DSLs, allowing you to design syntax that is specific to your problem domain.
+
+            -> Code Generation at Compile-Time:
+                Macros are evaluated at compile-time. 
+                They generate code before your program runs.
+
+            -> Textual Transformation:
+                Macros perform textual transformation of the code. 
+                They can take code as input, analyze its structure, and generate different code based on that structure.
+
+    Anyways returning back to "println!"...
+
+    -> Another key detail:
+        fn main() {
+            let life = 42;
+            println!("{:?}", life);
+            println!("{life:?}");
+            println!("{}", life);
+            println!("{life}");
+        }
+
+        -> "{:?}" or "{varname:?}" is typically used for debugging. prints the value using Rust's "Debug" trait.
+        -> "{}" or "{varname}" is used for general-purpose printing. prints the value using Rust's "Display" trait.
+
+> Control Flow (Conditional Statements)
+    "if", "else", "else if"
+
+    fn main() {
+        let a = 201;
+        if a > 200 {
+            println!("HUGE1");
+        } else if a > 99 {
+            println!("BIG1");
+        } else {
+            println!("SMALL1");
+        }
+        
+        if a > 99 {
+            println!("BIG2");
+        } else if a > 200 {
+            println!("HUGE2");
+        } else {
+            println!("SMALL2");
+        }
+    }
+
+> Iterations/Repititions/LOOPS
+    "loop" - infinite loop (keeps on going unless it finds a "breaking" condition)
+    "while" - conditional loop
+
+    > "LOOP"
+
+        fn main () {
+            let mut a = 0;
+            loop {
+                if a == 5 {
+                    break;
+                }
+                println!("{a:?}");
+                a = a + 1;
+            }
+        }
+
+        > the "break;" will break us out of the "loop" block, and execute the next code which comes after the "loop"
+
+        > Two types in "LOOP":
+            - Unlabeled Loop -> normal loop (like the one given above)
+            
+            - Labeled Loop -> 'label: loop {}
+                fn main() {
+                    let mut age = 42;
+                    'outer: loop {
+                        println!("Outer loop: age = {}", age);
+                        
+                        'inner: loop {
+                            println!("Inner loop: age = {}", age);
+
+                            if age >= 50 {
+                                println!("Vansh is OLD now!");
+                                break 'outer; // Break out of the outer loop
+                            }
+
+                            age += 1;
+                        }
+
+                        // This line is never reached without the label
+                        // because the break 'outer; statement jumps to the outer loop.
+                        println!("This line is never reached!");
+                    }
+                }
+            > We use Labeled Loop when dealing with "nested loops"
+            > They help in specifying which loop to break out of when you have multiple nested loops.
+
+
+    > NOTE: Both types of loops ("while" and "loop") can exit using "break"
+
+> BASIC RUST KNOWLEDGE: 
+    - In RUST, "main.rs" is the default binary file, which will executed when you command "cargo run".
+    - In a typical Rust project structure, the "src/bin" directory can be used to create additional binaries.
+        _> Run command: "cargo run --bin <binary_file_name>
+        example: "cargo run --bin file1" (no need to write "file1.rs")
+
+    - HOW TO RUN/EXECUTE RUST FILE CODE?
+        > if its a part of Rust Project managed by "Cargo", then you may use:
+            _> "cargo run" (for running default main.rs)
+            _> "cargo run --bin <bin_file_name>" (for running any additional binaries)
+
+        > IF you want to compile and run a Rust file directly without using Cargo
+            _> It's a basic compilation command using the Rust compiler "(rustc)"
+            _> Produces an executable file "(<binary_file_name.exe)"
+            Commands:
+                _> Navigate to the directory where the rust binary file is present
+                _> `rustc file1.rs`
+                _> `./file1`
+            _> This will execute the rust code directly using "Rust Compiler"
+
+    - "cargo clean" - removes the "target" folder
+
+> "match" keyword (Control Flow)
+    - used to "add logic to program"
+    - similar to if..else
+    - some what like switch..case
+    - difference: its "EXHAUSTIVE"
+        _> MEANING: "all options/outcomes of the expression must be accounted for (i.e. have some logic/output given for each n' every outcome)
+
+        _> this make it MORE ROBUST
+
+    - prefer "match" over "else..if" WHEN WORKING WITH SINGLE VARIABLE
+    - NOTE: "match" works on `expressions`, not `statements`
+    _> example:
+        fn main() {
+            let some_bool = true; // expression can have only two outcomes (either T or F)
+            match some_bool {
+                true => println!("its true"),
+                false => println!("its false"),
+            }
+        }
+
+        // OR
+
+        fn main() {
+            let some_int = 5;
+            match some_int {
+                1 => println!("its 1"),
+                2 => println!("its 2"),
+                3 => println!("its 3"),
+                _ => println!("its something else"),
+            }
+        }
+    - NOTE: "_" is like a wildcard logic, when we recieve any outcome which we haven't listed before
