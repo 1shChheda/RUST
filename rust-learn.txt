@@ -170,7 +170,7 @@
 
         > Two types in "LOOP":
             - Unlabeled Loop -> normal loop (like the one given above)
-            
+
             - Labeled Loop -> 'label: loop {}
                 fn main() {
                     let mut age = 42;
@@ -253,3 +253,74 @@
             }
         }
     - NOTE: "_" is like a wildcard logic, when we recieve any outcome which we haven't listed before
+
+> Working with Data | "enum" keyword
+    - Enum allows you to work with data in a "type-safe manner"
+
+    - in enum, Data can be one of the multiple listed possibilities
+        -> Each possibility is called a "variant"
+
+    - example:
+        enum Direction {
+            Up,
+            Down,
+            Left,
+            Right
+        }
+
+    - More robust programs when paired with "match" keyword
+
+> Working with Data | "struct" keyword
+    - similar to "Objects" in Javascript
+    - A type that contains multiple pieces of data
+    - Each piece of data is called a “field"
+        -> All or nothing - cannot have some pieces of data and not others
+        -> MEANING: when using "struct", we must utilize/fill data for all the "fields"
+    - Makes working with data easier
+        -> Similar data can be grouped together
+    - "Fields" can be accessed using a dot (.)
+    - example:
+        struct ShippingBox {
+            depth: i32,
+            width: i32,
+            height: i32,
+        }
+
+        let my_box = ShippingBox {
+            depth: 50,
+            width: 30,
+            height: 20,
+        };
+
+        println!("the box is {} units tall", my_box.height);
+
+> Working with Data | "tuples"
+    - A type of "record"
+    - Can contain any number of fields (of different types as well)
+        -> Use "struct" when more than 2 or 3 fields
+    - No need to name fields
+    - Allow for anonymous data access
+    - Can be "destructured" easily into variables
+
+> Expressions
+    - Rust is an expression-based language
+        -> In Rust, most constructs are expressions, meaning they produce a value.
+        -> Even control flow constructs like "if", "else", and "match" are expressions that result in a value.
+            - example:
+
+                let x = 5;
+                let y = if x > 0 { "positive" } else { "non-positive" };
+                // Here, the value of `y` depends on the result of the "if" expression.
+
+        -> Expression values coalesce to a single point
+            - The values of multiple expressions can be combined into a single point
+            - example: 
+
+                let result = {
+                    let a = 2;
+                    let b = 3;
+                    a * b  // The value of this expression is the value of the block
+                };
+
+        -> Can be used for nesting logic
+        -> 
