@@ -269,6 +269,121 @@ fn arithmetic_op(a: i32, b: i32, c: &str) -> i32 {
     }
 
 // ---------------------------------------------------
+    // Topic: Data Structures | Vector
+    //
+    // Task 11a: Vector Basics
+    struct Test {
+        score: i32,
+    }
+
+    // Task 11b:
+    // * Print 10, 20, "thirty", and 40 in a loop
+    // * Print the total number of elements in a vector
+    //
+    // * Use a vector to store 4 numbers
+    // * Iterate through the vector using a for..in loop
+    // * Determine whether to print the number or print "thirty" inside the loop
+    // * Use the .len() function to print the number of elements in a vector
+// ---------------------------------------------------
+    // Topic: Data Types | Strings
+    //
+    // Task 12a: String Basics
+    struct Employee {
+        emp_name: String,
+    }
+
+    // Task 12b: Use of String with 
+    struct LineItem {
+        name: String,
+        count: i32,
+    }
+
+// ---------------------------------------------------
+    // Topic: "derive" functionality
+    //
+    // Task 13: Use #derive - Basics
+    #[derive (Debug, Clone, Copy)]
+    enum Position {
+        Manager,
+        Supervisor,
+        Developer,
+    }
+
+    #[derive (Debug, Clone, Copy)]
+    struct Worker {
+        position: Position,
+        work_hours: i64,
+    }
+
+    fn print_worker(worker: Worker) {
+        println!("{:?}", worker);
+    }
+
+// ---------------------------------------------------
+    // Topic: Advanced Match
+    //
+    // Task 14a: Use case of Advanced Match
+    enum Discount {
+        Percent(i32),
+        Flat(i32),
+    }
+
+    struct Ticket {
+        event: String,
+        price: f64,
+    }
+
+    // Task 14b:
+    // * Print out a list of tickets and their information for an event
+    // * Tickets can be Backstage, Vip, and Standard
+    // * Backstage and Vip tickets include the ticket holder's name
+    // * All tickets include the price
+    //
+    // * Use an enum for the tickets with data associated with each variant
+    // * Create one of each ticket and place into a vector
+    // * Use a match expression while iterating the vector to print the ticket info
+
+    // #[derive(Debug)]
+    enum EventTicket {
+        Backstage(f64, String),
+        Vip(f64, String),
+        Standard(f64),
+    }
+
+// ---------------------------------------------------
+    // Topic: "Option" Type
+    //
+    // Task 15a: Basic Use Case
+
+    struct Customer {
+        age: Option<i32>,
+        email: String,
+    }
+
+    // Task 15b: Using "Option" in function returns
+    struct ShoppingItem {
+        name: String,
+        qty: i32,
+    }
+
+    fn find_shoppingitem_qty(name: &str) -> Option<i32> {
+        let all_shop_items = vec![
+            ShoppingItem { name: String::from("bread"), qty: 5 },
+            ShoppingItem { name: String::from("milk"), qty: 1 },
+            ShoppingItem { name: String::from("cake"), qty: 3 },
+        ];
+
+        for item in all_shop_items {
+            if item.name == name {
+                return  Some(item.qty);
+            }
+        }
+
+        None
+    }
+
+
+// ---------------------------------------------------
 
 
 fn main() {
@@ -430,4 +545,146 @@ fn main() {
     let small_box = Box::new(small_dimensions, 35.5, Colour::Red);
 
     small_box.print();
+
+    // Task 11a:
+    println!("\n---------TASK11---------");
+
+    let my_scores = vec![
+        Test { score: 90 },
+        Test { score: 82 },
+        Test { score: 75 },
+        Test { score: 53 },
+    ];
+
+    for test in my_scores {
+        println!("score = {}", test.score);
+    }
+
+    // Task 11b:
+    let my_numbers = vec![10, 20, 30, 40];
+
+    for num in &my_numbers {
+        match num {
+            30 => println!("thirty"),
+            _ => println!("{}", num)
+        }
+    }
+
+    println!("length of vector: {}", my_numbers.len());
+
+    // Task 12a:
+    println!("\n---------TASK12---------");
+    let emp = Employee {
+        emp_name: String::from("Vansh")
+    };
+
+    println!("{}", emp.emp_name);
+
+    // Task 12b:
+    let receipt = vec![
+        LineItem {
+            name: "Arduino".to_owned(),
+            count: 3,
+        },
+        LineItem {
+            name: String::from("Adafruit"),
+            count: 5,
+        }
+    ];
+
+    for item in receipt {
+        println!("name: {}, count: {}", item.name, item.count);
+    }
+
+
+    // Task 13
+    println!("\n---------TASK13---------");
+
+    let me = Worker {
+        position: Position::Developer,
+        work_hours: 40,
+    };
+
+    // Using derived Debug trait (on ENUM) for printing
+    println!("{:?}", me.position);
+
+    // Using derived Debug trait (on STRUCT) for printing
+    println! ("{:?}", me);
+
+    // Using derived Copy trait (on STRUCT) for copying the data into the function, instead of passing the ownership of the OG data
+    print_worker(me);
+    print_worker(me);
+        // NOTE: DO NOT USE "Clone, Copy" traits on data collections with larger number of fields. UNECESSARY Duplication of Data, memory usage redundancy
+
+    // Task 14a:
+    println!("\n---------TASK14---------");
+
+    let flat = Discount::Flat(4);
+    match flat {
+
+        // We can use _ to ignore any value that happens to be there 
+        // OR 
+        // We can also match it to a particular value (ex: Flat(2))
+        Discount::Flat(2) => println!("Base Flat Disc. of $2"),
+        Discount::Flat(amount) => println!("Sp. Offer Discount of ${}", amount),
+        _ => (), // We use () to return NOTHING
+    }
+
+    let concert = Ticket {
+        event: String::from("OneDirection Concert"),
+        price: 49.99
+    };
+
+    match concert {
+
+        // If we're concerned with only the "price", then use ".." to ignore other fields
+        Ticket{ price: 49.99, event } => println!("Event @ 49.99: {event}"),
+        Ticket { price,.. } => println!("Event Price: {price}"),
+    }
+
+    // Task 14b:
+    let event_tickets = vec![
+        EventTicket::Backstage(89.99, String::from("Vansh")),
+        EventTicket::Vip(69.99, String::from("Darshil")),
+        EventTicket::Standard(69.99),
+    ];
+
+    for ticket in event_tickets {
+        // println!("{ticket:?}"); // IF WE USE "#[derive]" on EventTicket
+
+        match ticket {
+            EventTicket::Backstage(price, holder) => println!("Backstage Ticket Holder: {holder}, Price: {price}"),
+
+            EventTicket::Vip(price, holder) => println!("VIP Ticket Holder: {holder}, Price: {price}"),
+
+            EventTicket::Standard(price) => println!("Standard Ticket Price: {price}"),
+        }
+    }
+
+
+    // Task 15a:
+    println!("\n---------TASK15---------");
+
+    let mike_rodick = Customer {
+        age: Some(22), 
+        email: String::from("mikerodick22@example.com"),
+    };
+
+    let hugh_jass = Customer {
+        age: None, 
+        email: String::from("hughjass91@example.com"),
+    };
+
+    match mike_rodick.age {
+        Some(age) => println!("Customer is {age} yrs old"),
+        None => println!("Customer age Not provided"),
+    }
+
+    // Task 15b:
+    let shopping_item_qty = find_shoppingitem_qty("bread");
+    match shopping_item_qty {
+        Some(qty) => println!("Item Found! Qty: {qty:?}"),
+        None => println!("Item Not Found")
+    }
+
 }

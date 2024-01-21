@@ -491,3 +491,166 @@
         -> "Self" and Constructors:
             - Constructors are often implemented as associated functions returning "Self".
             - "Self" is an alias for the `type` implementing the methods, providing flexibility when the type name changes.
+
+> Data Collections | Vector Data Structure
+    > allows you to store "Multiple pieces of Data"
+        - Must be the same type
+    > Used for lists of information
+    > Can add, remove, and traverse the entries(data)
+        
+    > Implementaion:
+        > we use "vec!" macro, 
+            > let my_numbers = vec![1,2,3];
+            OR
+        > use "new" function which is implemented on the "Vec" struct
+            > let mut my_numbers = Vec::new();
+            > my_numbers.push(1); // index 0
+            > my_numbers.push(2); // index 1
+            > my_numbers.push(3); // index 2
+            > my_numbers.pop(); // removes the last item you've added
+            > my_numbers.len(); // returns the length of vector variable
+
+            // ACCESS ITEM from Vector (using "Slice" concept)
+            > let num_two = my_numbers[1];
+
+            // TRAVERSE thr' a Vector
+                // use "for in loop"
+                // it is specifically used to iterate thr' data collections/structures
+            > for num in &my_numbers {
+                println!("{}", num);
+            }
+                // use "borrowing" in "for in loop", else the data will be moved in the loop, unavailable for further use.
+
+    > NOTE: 
+        -> While a "Vector" shares some characteristics with a "Stack" (last-in, first-out), it doesn't strictly enforce the stack's `LIFO` behavior. -> -> Elements can be inserted or removed from any position within the vector.
+
+> Data Collections | Strings Data Types
+    > Two commonly used types of strings
+        > String- owned
+        > &str - borrowed String slice
+    > Must use an "owned" String to store in a "struct"
+        > WHY SO?:
+            - when we try to store borrowed data in struct, it won't compile
+            - struct is responsible for cleaning-up its own memory
+            - however, if its using a borrowed data, its not allowed to do so, thus A COMPILE ERROR!
+
+    > Use "&str" when passing to a function
+    > example 1: 
+        fn print_it(data: &str) {
+            println!("{}", data);
+        }
+
+        fn main() {
+            print_it("a string slice");
+
+            // different ways to implement "Owned" String
+            let owned_string = "owned_string".to_owned();
+            let another_owned = String::from("another");
+            print_it(&owned_string);
+            print_it(&another_owned);
+        }
+
+    > NOTE:
+        - if you write normal string (ex: "hello amigo"), then it is treated as a String Slice.
+        - if you want to specifically use Owned string, you will have to mention it correctly in code.
+
+> "derive" functionality
+    > SO FAR, in order to print enum variants, we had to use "match" & write print statement for each variant.
+
+    > `derive` is a special macro, which can be applied to "enum" and "struct"
+
+    > `derive` allows you to automatically implement certain traits for your custom data types, saving you from writing repetitive boilerplate code
+
+    > ex:
+        #[derive (Debug)]
+        enum Position {
+            Manager,
+            Supervisor,
+            Worker,
+        }
+
+        #[derive (Debug)]
+        struct Employee {
+            position: Position,
+            work_hours: i64,
+        }
+
+        fn main() {
+            let me = Employee {
+                position: Position:: Worker,
+                work_hours: 40,
+            };
+
+            // Using derived Debug trait (on ENUM) for printing
+            println!("{:?}", me.position);
+
+            // Using derived Debug trait (on STRUCT) for printing
+            println! ("{:?}", me);
+        }
+
+    > Important Note:
+        - All fields within the struct or enum also have to derive that functionality
+        - TRY REMOVING "#derive" for "enum" in above ex.
+            -> the "derive" on "struct" will give an ERROR, since it has "Position" field
+
+> "enum" revisited
+    > enum is not limited to just plain variants
+        - Each variant can optionally contain additional data
+
+    > inside the parenthesis, we mention the data type (int, char, str, OR struct, enum, etc...)
+    > example 1:
+        struct Mouse {
+            LeftClick,
+            RightClick,
+            MiddleClick,
+            Scroll(i32),
+            Move(i32, i32),
+        }
+
+    > example 2:
+        enum PromoDiscount {
+            NewUser,
+            Holiday(String)
+        }
+
+        enum Discount {
+            Percent(f64),
+            Flat(i32),
+            Promo(PromoDiscount),
+            Custom(String),
+        }
+
+    > ADVANCED "match"
+        - conventionally, we write:
+            let n = 3;
+            match n {
+                3 => println!("three"),
+                _ => println!("number: {}", n),
+            }
+
+        - with advanced match, we write:
+            match n {
+                3 => println!("three"),
+                other => println!("number: {}", other),
+            }
+
+> REFER Task 14a,b THOROUGHLY to understand Advanced match
+
+> Working with Data | "Option"
+    > A type that may be one of two things
+        - Some data of a specified type
+        - Nothing
+    > Used in scenarios where data may not be required or is unavailable
+        - Form field not filled out
+        - Unable to find something
+        - Ran out of items in a list
+
+    > BASIC: 
+    enum Option<T> {
+        Some(T),
+        None,
+    }
+        > "<T>": data type of field
+        > Some(T): Represents the presence of a value of type `T`.
+        > None: Represents the absence of a value.
+
