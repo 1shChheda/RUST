@@ -152,6 +152,125 @@ fn arithmetic_op(a: i32, b: i32, c: &str) -> i32 {
     //
     // Task 8: Basic use of Expression
 
+// ---------------------------------------------------
+    // Topic: Memory/Ownership Concept in RUST
+    //
+    // Task 9: 
+    // * Print out the page_count and rating of a book
+    // * Use a struct for the book
+    // * Use two i32 fields for the page_count and rating
+    // * Create a function to display the page_count, with the struct as a parameter
+    // * Create a function to display the rating, with the struct as a parameter
+
+    struct Book {
+        pages: i32,
+        rating: i32,
+    }
+
+    fn display_page_count(book: &Book) {
+        println!("pages: {}", book.pages);
+    }
+
+    fn display_rating(book: &Book) {
+        println!("rating: {}", book.rating);
+    }
+
+// ---------------------------------------------------
+    // Topic: "impl" keyword
+    //
+    struct Temperature {
+        degrees_f: f64,
+    }
+
+        // Task 10a: Associated Function with Instance
+    // impl Temperature {
+    //     fn show_temp(temp: Temperature) {
+    //         println!("{} degrees F", temp.degrees_f)
+    //     }
+    // }
+
+        // Task 10b: Method Implementation
+    // impl Temperature {
+    //     fn show_temp(&self) {
+    //         println!("{} degrees F", self.degrees_f)
+    //     }
+    // }
+
+        // Task 10c: Associated Function (as Constructor) and Method
+    impl Temperature {
+        fn freezing() -> Self {
+            Self { degrees_f: 32.05 }
+        }
+
+        fn show_temp(&self) {
+            println!("{} degrees F", self.degrees_f)
+        }
+    }
+
+        // Task 10d: IMPORTANT
+        // * Print the characteristics of a shipping box
+        // * Must include dimensions, weight, and color
+        //
+        // * Use a struct to encapsulate the box characteristics
+        // * Use an enum for the box color
+        // * Implement functionality on the box struct to create a new box
+        // * Implement functionality on the box struct to print the characteristics
+
+    // enum Colour defined already in "Task 5b"
+    // enum Colour {
+    //     Red,
+    //     Yellow,
+    //     Blue,
+    //     Green
+    // }
+    impl Colour {
+        fn print(&self) {
+            match self {
+                Colour::Red => println!("Box Colour: Red"),
+                Colour::Blue => println!("Box Colour: Blue"),
+                Colour::Yellow => println!("Box Colour: Yellow"),
+                Colour::Green => println!("Box Colour: Green"),
+            }
+        }
+    }
+    struct Dimensions {
+        length: i32,
+        width: i32,
+        height: i32,
+    }
+
+    impl Dimensions {
+        fn print(&self) {
+            println!("Box Dimensions (L): {}", self.length);
+            println!("Box Dimensions (H): {}", self.height);
+            println!("Box Dimensions (W): {}", self.width);
+        }
+    }
+    struct Box {
+        dimensions: Dimensions,
+        weight: f64,
+        colour: Colour,
+    }
+
+    impl Box {
+        fn new(dimensions: Dimensions, weight: f64, colour: Colour) -> Self {
+            Self { 
+                dimensions, 
+                weight, 
+                colour
+            }
+        }
+        fn print(&self) {
+            self.dimensions.print();
+            println!("Box Weight: {}", self.weight);
+            self.colour.print();
+            
+        }
+    }
+
+// ---------------------------------------------------
+
+
 fn main() {
 
     // Task 1
@@ -278,4 +397,37 @@ fn main() {
     };
     println!("Order Placed? `{order_placed}`");
 
+    // Task 9a:
+    println!("\n---------TASK9---------");
+    let book = Book {
+        pages: 32,
+        rating: 9
+    };
+
+    display_page_count(&book);
+    display_rating(&book);
+    
+    // Task 10a:
+    println!("\n---------TASK10---------");
+    // let hot = Temperature { degrees_f: 80.93 };
+    // Temperature::show_temp(hot);
+
+    // Task 10b:
+    let hot = Temperature { degrees_f: 80.93 };
+    hot.show_temp();
+
+    // Task 10c:
+    let cold = Temperature::freezing();
+    cold.show_temp();
+
+    // Task 10d:
+    let small_dimensions = Dimensions {
+        length: 10,
+        width: 20,
+        height: 30,
+    };
+
+    let small_box = Box::new(small_dimensions, 35.5, Colour::Red);
+
+    small_box.print();
 }

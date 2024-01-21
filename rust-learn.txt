@@ -323,4 +323,171 @@
                 };
 
         -> Can be used for nesting logic
-        -> 
+
+> MEMORY Concepts in Rust
+    > Addresses
+        - All data in memory has an “address”
+            -> Used to locate data
+            -> Always the same - only data changes
+        - Usually don't utilize addresses directly
+            -> Variables handle most of the work
+
+    > Offsets
+        - Used to locate Items a specific address
+            -> Offsets begin at 0
+        - Represent the number of bytes away from the original address
+            -> Normally deal with indexes instead
+    
+    ex: 
+                       OFFSET
+         +------+------+------+------+------+
+      A  |      | 0    | 1    | 2    | 3    |
+      D  |  0   | _    | _    | _    | _    |
+      R  |  4   | _    | *    | _    | _    |
+      E  |  12  | _    | _    | _    | _    |
+      S  |  16  | _    | _    | _    | _    |
+      S  +------+------+------+------+------+
+
+        At * location,
+        In computer: "Address 4, Offset 1"
+        In program: "Data[1]"
+
+        Thus, "Data" array represents the ADDRESS of data
+        & "index" of this array represents OFFSET to access a specific element in "Data"
+
+> Ownership Model
+    - Ownership is what allows RUST :
+        -> to execute code in "performant" manner
+        -> ensures the code runs correctly under various circumstances
+
+    - Programs must track memory
+        -> If they fail to do so, a "leak” occurs
+    - Rust utilizes an “ownership” model to manage memory
+        -> The “owner” of memory is responsible for cleaning up the memory
+    - Memory can either be “moved” or “borrowed”
+    - Memory gets automatically "dropped" by the owner, once the owner fn. block ends 
+
+    NOTE: SO FAR IN LEARNINGS, WE'VE BEEN "MOVING" THE MEMORY
+
+    - ex:
+    ```Example 1: Ownership Transfer/Move
+    enum Light {
+        Bright,
+        Dull,
+    }
+
+    fn display_light(light: Light) {
+        match light {
+            Light::Bright => println!("bright"),
+            Light::Dull => println!("dull"),
+        }
+    }
+
+    fn main() {
+        let dull = Light::Dull;
+        display_light(dull);  // Ok, ownership transferred
+        display_light(dull);  // Error: value borrowed here after move
+            // In first "display_light" fn. call, the "dull" variable's ownership is transferred from "main" fn. -> "display_light" fn.
+            // It uses it, executes its code, and then deletes the "dull" in memory, after code execution of display_light.
+            // In second attempt to call "display_light" fn., there is no "dull" in memory (since deleted in last call)
+            // THUS, IT GIVES AN ERROR!
+    }
+    ```
+
+    ```
+    enum Light {
+        Bright,
+        Dull,
+    }
+
+    fn display_light(light: &Light) {
+        match light {
+            Light::Bright => println!("bright"),
+            Light::Dull => println!("dull"),
+        }
+    }
+
+    fn main() {
+        let dull = Light::Dull;
+        display_light(&dull);  // Passing a reference to dull
+        display_light(&dull);  // Passing another reference to dull
+    }
+        // Here, we are allowing "display_light" fn. to borrow "dull", in the First fn. call
+        // Also, "&Light" makes sure that the display_light just borrows the argument, and IT IS NOT ALLOWED TO DELETE IT
+        // THUS, We can make the second display_light fn. call SUCCESSFULLY!
+        // at the end of main() fn. execution, the "dull" will be deleted from memory :)
+
+    ```
+
+    - KEY NOTE:
+        -> Use of "dull" and "&dull" as argument
+
+        - "Ownership Transfer"
+            -> "display_light(dull)" means you are `transferring ownership` of the "dull" variable to the "display_light" function.
+            -> This would imply that after the call, you can't use dull in the main function anymore.
+
+        - "Borrowing a Reference"
+            -> "display_light(&dull)" means you are `borrowing a reference` to the "dull" variable.
+            -> The function "display_light" can use the value pointed to by the reference, but ownership remains with the main function.
+            -> You can still use dull after the call to `display_light(&dull)`.
+
+    - WHY DO ALL THIS?! REASON?!
+        -> Memory Safety & Management
+            - Ownership and borrowing prevent the creation of "dangling pointers", which occur when a pointer references memory that may have been freed.
+            - Ownership ensures that when a variable goes out of scope, the associated memory is freed, preventing memory-related bugs.
+
+        -> Efficient 
+            - Rust's ownership system allows for efficient memory management without sacrificing runtime performance.
+            The ownership model eliminates the need for garbage collection while ensuring memory safety.
+
+> Data Collections | "impl"
+    > "impl" is used to define methods and associated functions for a type.
+    >  It allows you to encapsulate functionality within the context of a particular "struct" or "enum".
+
+    > Associated Fn. V/S Method | w.r.t impl
+        -> Associated Function:
+            - Doesn't take self as a parameter.
+            - Often used as constructors or utility functions related to the type.
+            - Invoked using the type name, not an instance.
+
+            - ex:
+            ```
+            struct Temperature {
+                degrees_f: f64,
+            }
+
+            impl Temperature {
+                fn freezing() -> Self {
+                    Self { degrees_f: 32.05 }
+                }
+            }
+
+            let cold = Temperature::freezing();
+            ```
+
+        -> Method:
+            - Takes self (reference or mutable reference) as the first parameter.
+            - Acts on an instance of the type.
+            - Invoked using an instance of the type.
+
+            - ex:
+            ```
+            struct Temperature {
+                degrees_f: f64,
+            }
+
+            impl Temperature {
+                fn show_temp(&self) {
+                    println!("{} degrees F", self.degrees_f);
+                }
+            }
+
+            let hot = Temperature { degrees_f: 80.93 };
+            hot.show_temp();
+            ```
+
+
+    > Best Practices:
+        -> "Self" and Constructors:
+            - Constructors are often implemented as associated functions returning "Self".
+            - "Self" is an alias for the `type` implementing the methods, providing flexibility when the type name changes.
