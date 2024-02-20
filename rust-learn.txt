@@ -84,7 +84,7 @@
 
         > example:
 
-            macro_rules my_macro {
+            macro_rules! my_macro {
                 // pattern and replacement code go here
                 ($arg: expr) => {
                     // macro logic using $arg
@@ -557,7 +557,7 @@
 > "derive" functionality
     > SO FAR, in order to print enum variants, we had to use "match" & write print statement for each variant.
 
-    > `derive` is a special macro, which can be applied to "enum" and "struct"
+    > `derive` is a special macro, which can be applied to "enum" and "struct" ONLY!
 
     > `derive` allows you to automatically implement certain traits for your custom data types, saving you from writing repetitive boilerplate code
 
@@ -654,3 +654,73 @@
         > Some(T): Represents the presence of a value of type `T`.
         > None: Represents the absence of a value.
 
+    > Note: use "Option<type>" to declare an optional type
+
+> DOCUMENTATION generation (GREAT TOOL FOR EXAMINING CODE)
+    > usually Normal Comments in Rust are denoted by prefix as "//"
+    > to denote a Documentation Comments, use "///" as prefix
+
+    > in Rust, if you want to document code explanations & generate them separately for better view, do the following:
+    
+        -> use "///" to denote a documentation
+
+        -> in CLI, run "cargo doc --open"
+            _> "cargo doc" generates a documentation file for you
+            _> "--open" simply opens that file directly after generation
+
+        -> This creates doc files (html pages) for your documentation in the "target" folder
+        
+> Rust Standard Library Docs
+    > run "rustup doc" in CLI
+
+    > this will open the rust documentations, where you can search for specific functionality that you want to implement in Rust (on any particular)
+
+    > If you already know the name of what you are looking for, the fastest way to find it is to use the search bar at the top of the page
+
+    > EXPLORE!
+
+> EXTRA KNOWLEDGE: "assert" macro
+    > How it works?
+        -> The assert macro takes a boolean expression as its argument. 
+        -> If the expression evaluates to true, nothing happens, and the program continues execution as normal. 
+        -> However, if the expression evaluates to false, the assert macro will "panic", causing the program to terminate immediately.
+
+        -> When an assertion fails, it prints an error message containing the failed expression along with the file and line number where the assertion occurred.
+
+    > "assert" is commonly used in testing to verify that certain conditions hold true. It's especially useful for writing unit tests and ensuring that functions and code blocks behave as expected under various conditions.
+
+> Working with Data | "Result" data type
+    > A data type that contains one of two types of data:
+        -> "Successful" data
+        -> "Error" data
+    > Used in scenarios where an action needs to be taken, but has the possibility of failure
+        -> Copying a file
+        -> Connecting to a website
+
+    _> SYNTAX:
+        enum Result <T, E> {
+            Ok(T),
+            Err(E)
+        }
+
+    _> Example:
+        enum SoundData {
+            alert,
+            notification
+        }
+        
+        fn get_sound(name: &str) -> Result<SoundData, String> {
+            if name == "notification" {
+                Ok(SoundData::notification)
+            } else {
+                Err("Sound Data Not Found!".to_owned())
+            }
+        }
+
+        let sound = get_sound("notification");
+        match sound {
+            Ok(_) => println!("Sound Data Found!"),
+            Err(e) => println!("error!{e}")
+        }
+
+    

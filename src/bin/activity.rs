@@ -1,3 +1,5 @@
+use std::vec::Splice;
+
 // ---------------------------------------------------
     // Topic: Functions
     //
@@ -384,6 +386,75 @@ fn arithmetic_op(a: i32, b: i32, c: &str) -> i32 {
 
 
 // ---------------------------------------------------
+    // Topic: Browsing standard library documentation
+    //
+    // Task 16:
+    // * Browse through various String methods
+
+// ---------------------------------------------------
+    // EXTRAS:
+    // Topic: "assert" macro
+    //
+    // Task 17: Basic Use Case
+
+// ---------------------------------------------------
+    // Topic: "Result" Data Type
+    //
+    // Task 18a: Basic Usage
+
+    #[derive(Debug)]
+    enum MenuChoice {
+        MainMenu,
+        Start,
+        Quit,
+    }
+
+    fn get_choice(input: &str) -> Result<MenuChoice, String> {
+        match input {
+            "mainmenu" => Ok(MenuChoice::MainMenu),
+            "start" => Ok(MenuChoice::Start),
+            "quit" => Ok(MenuChoice::Quit),
+            _ => Err(String::from("menu choice not found")),
+        }
+    }
+
+    fn print_choice (choice: &MenuChoice) {
+        println!("choice = {:?}", choice);
+    }
+
+    // Task 18b:
+    //
+    // * Create an structure named 'Adult' that represents a person aged 21 or older:
+    // * The structure must contain the person's name and age
+    // * Implement Debug print functionality using 'derive`
+    // * Implement a new function for the 'Adult structure that returns a Result:
+    // * The Ok variant should contain the initialized structure, but only
+    // if the person is aged 21 or older
+    // * The Err variant should contain a String (or &str) that explains why the structure could not be created
+    // * Instantiate two 'Adult` structures:
+    // * One should be aged under 21
+    // * One should be 21 or over
+    // * Use `match to print out a message for each 'Adult':
+    // * For the Ok variant, print any message you want
+    // * For the Err variant, print out the error message
+    #[derive(Debug)]
+    struct Adult {
+        name: String,
+        age: i32
+    }
+
+    impl Adult {
+        fn new(name: String, age: i32) -> Result<Self, String> {
+            if age >= 21 {
+                Ok(Self{ name, age })
+            } else {
+                Err(String::from("NOT An Adult!"))
+            }
+        }
+    }
+
+// ---------------------------------------------------
+
 
 
 fn main() {
@@ -687,4 +758,86 @@ fn main() {
         None => println!("Item Not Found")
     }
 
+    // Task 16:
+    println!("\n---------TASK16---------");
+
+        // "ends_with()" method
+    let sample_str1 = "vanshchheda";
+    println!("{}", sample_str1.ends_with("eda")); // returns true or false
+
+        // "find()" method
+    let sample_str2 = "vansh scores well in test";
+    let str2_index = sample_str2.find("s");
+    match str2_index {
+        Some(n) => println!("Index: {n}"),
+        None => println!("Index Not Found")
+    }
+    
+        // "get" method (to get the substring out of a string)
+    let sub_str2 = sample_str2.get(0..4);
+    match sub_str2 {
+        Some(result) => println!("SubString: {}", result),
+        None => println!("Nothing")
+    }
+
+        // "split & collect" method (split method as used in Javascript)
+        // returns a Vector of elements
+        // NOTE: you'll have to mention the type (T) here ( Vec<T> )
+            // example: Vec<&str>
+    let split_str2: Vec<&str> = sample_str2.split(" ").collect();
+    for elem in split_str2 {
+        println!("{}", elem);
+    }
+
+
+    // Task 17:
+    println!("\n---------TASK17---------");
+
+    let mut x = 3;
+    let mut y = 7;
+
+    // assert!(x < y); // normal assert macro use.
+    assert!(x < y, "x({}) is not GT y({})", x, y); // using assert with a custom panic message
+
+    println!("Hey! the assertion was true, so Program proceeded.");
+
+
+    // Task 18:
+    println!("\n---------TASK18---------");
+
+        // Task 18a:
+
+    fn pick_choice(input: &str) -> Result <(), String> {
+        let choice = get_choice(input)?;
+        print_choice(&choice);
+        Ok(())
+    }
+
+    // What is happening in above code?
+        // the 'get_choice()' fn gives a "Result" type response ("Ok" or "Err")
+        // We still can't access the "inner data" of this Return type
+        // So, we have used "?" notation
+        // What does "?" do?
+            // It will check if the response is "Ok" or "Err"
+            // if "Ok", then it will store the inner data in the variable
+            // if "Err", then it will return the Err value up the call stack (meaning: first to "pick_choice()", representing the String, and then to )
+    
+    // pick_choice("start"); // This will only handle Successful cases
+
+    // To also handle Err situation (IMPORTANT)
+    if let Err(err) = pick_choice("start") {
+        println!("Error: {}", err); // Print the error message
+    }
+
+    
+        // Task 18b:
+    fn adult_or_not(name: String, age: i32) -> Result<(), String> {
+        let person = Adult::new(name, age)?;
+        println!("{} is an Adult! age {}", person.name, person.age);
+        Ok(())
+    }
+
+    if let Err(err) = adult_or_not("Vansh".to_owned(), 43) {
+        println!("Nope! {}", err);
+    }
 }
