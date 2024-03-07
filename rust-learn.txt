@@ -723,4 +723,110 @@
             Err(e) => println!("error!{e}")
         }
 
-    
+> Data Structures | Hashmap
+    > Collections that stores data as key-value pairs
+        - Data is located using the "key"
+        - The data is the "value"
+    > Similar to "Dictionary" in Python
+    > Very fast to retrieve data using the key
+    > Note: here, Data is stored in Random order (Unlike in Vector, where Data is stored in the same order as inserted)
+
+> Closures
+    > Similar to "lambda function"
+    _> Example:
+        fn main() {
+            let add_one = |x| x + 1;
+            println!("Result: {}", add_one(5)); // Prints: Result: 6
+        }
+
+> Map Combinator
+   fn maybe_num() -> Option<i32> {}
+
+   fn maybe_word() -> Option<String> {} 
+
+    fn main() {
+
+        // let plus_one = match maybe_num {
+        //     Some(num) => Some(num + 1),
+        //     None => None,
+        // };
+
+        // Instead of doing the above, where you're getting a "Some(num)" and returning another "Some(num + 1)", do the following:
+
+        let plus_one = maybe_num().map(|num| num + 1);
+        // This will return the same thing if we get "Some()", else it wont store anything if we get "None"
+
+        // Chained Map
+        let word_length = maybe_word()
+            .map(|word| word.len())
+            .map(|len| len * 2)
+    }
+
+> Option Combinator Pattern
+    Using various functions applicable to results of "Option" Type
+
+> Iterator
+    > Example:
+
+        let numbers_vector = vec![1,2,3,4,5];
+
+        // Instead of using:
+            for num in numbers_vector {
+                plus_one_vector.push(num + 1);
+            }
+        
+        // We can use ".iter()" method:
+            let nums = vec![1,2,3,4,5];
+            let plus_one: Vec<_> = nums
+                    .iter()
+                    .map(|num| num + 1)
+                    .collect(); 
+            println!("{:?}", plus_one);
+
+    NOTE: ".collect()" simply "TRANSFORMS AN ITERATOR INTO A COLLECTION (specified at "plus_one: Vec<_>")
+
+    > THUS, We can use iterator with many other functions like 
+        ".filter()", 
+        ".count()", 
+        ".last()",
+        ".min()" & ".max()"
+        "take(4)"
+
+> "Range" Type
+    > a "range" is simply an AUTOMATED WAY to create a range of values.
+    > SYNTAX:
+        let range = 1..=3; // this will exclude the last term
+        let range = 1..3; // this will include the last term as well
+    > NOTE: 
+        -> You will have to use "for in" loop or some loop to print Range values. 
+        -> Can't just use "{:?}" debug Trait here to directly print values. (TRY IT, WON'T WORK CORRECTLY)
+
+> "if let" Concept
+    > Basically a substitute for "match" expression for handling pattern matching on enums or structs when you're interested in only one particular case and want to ignore the rest.
+
+    > For instance:
+        -> In cases where results can be "Some()" or "None", when we want to print them, or perform any further task, we have to use the "match" keyword
+            _> example:
+            let maybe_user = Some("Jerry");
+            match maybe_user {
+                Some(user) => println!("user : {:?}", user),
+                None => println!("no user"),
+            }
+        
+        -> Now, in the case when we want to perform something with the Some or None thing alone (if..let), or both cases (if..let..else):
+            _> example:
+            if let Some(user) = maybe_user {
+                println!("user is: {:?}", user);
+            } else {
+                println!("no user");
+            }
+
+    > NOTE: It's particularly useful when you have a simple match pattern with only one arm.
+
+> "while let" Concept
+    -> Similar to "if let", but creates a while loop, till the certain parameter in consideration becomes None.
+
+    -> It's particularly useful when working with Iterators, because alotta iterators may return a Optional Data
+
+    Advances the iterator and returns the next value. Returns "None" when iteration is finished.
+

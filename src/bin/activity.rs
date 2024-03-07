@@ -1,4 +1,4 @@
-use std::vec::Splice;
+use std::collections::HashMap;
 
 // ---------------------------------------------------
     // Topic: Functions
@@ -454,6 +454,55 @@ fn arithmetic_op(a: i32, b: i32, c: &str) -> i32 {
     }
 
 // ---------------------------------------------------
+    // Topic: Data Structures | HashMap
+    //
+    // Task 19a: Basic Use Of HashMaps
+
+    // Task 19b: Depict a Student Locker system
+    #[derive(Debug)]
+    struct Contents {
+        stud_id: u32,
+        stud_name: String,
+    }
+
+
+// ---------------------------------------------------
+    // Topic: Map Combinators & Option Combinators
+    //
+    // Task 20a: Map Combinator
+
+    // Task 20b: Option Combinator
+
+
+// ---------------------------------------------------
+    // Topic: Iterator
+    //
+    // Task 21:
+    // a) Basic use case of iterator
+    // b) Perform the following:
+    // * Triple the value of each item in a vector.
+    // * Filter the data to only include values > 10.
+    // * Print out each element using a for loop.
+    // NOTE: Use an iterator chain to accomplish the task.
+
+// ---------------------------------------------------
+    // Topic: Ranges
+    //
+    // Task 22: Basic Use of Ranges
+
+// ---------------------------------------------------
+    // Topic: "if let", "while let"
+    //
+    // Task 23a: use of "if let"
+    enum IntOption {
+        Some(i32),
+        None,
+    }
+
+    // Task 23b: use of "while let"
+
+
+// ---------------------------------------------------
 
 
 
@@ -816,8 +865,8 @@ fn main() {
     // What is happening in above code?
         // the 'get_choice()' fn gives a "Result" type response ("Ok" or "Err")
         // We still can't access the "inner data" of this Return type
-        // So, we have used "?" notation
-        // What does "?" do?
+        // So, we have used "?" operator
+        // What does "?" operator do?
             // It will check if the response is "Ok" or "Err"
             // if "Ok", then it will store the inner data in the variable
             // if "Err", then it will return the Err value up the call stack (meaning: first to "pick_choice()", representing the String, and then to )
@@ -840,4 +889,166 @@ fn main() {
     if let Err(err) = adult_or_not("Vansh".to_owned(), 43) {
         println!("Nope! {}", err);
     }
+
+    // Task 19
+    println!("\n---------TASK19---------");
+
+    // Task 19a
+    let mut people = HashMap::new();
+        // Insertion
+    people.insert("Vansh", 29);
+    people.insert("Arijit", 45);
+    people.insert("Shawn", 32);
+
+    match people.get("Vansh") {
+        Some(age) => println!("age: {:?}", age),
+        None => println!("Not Found"),
+    }
+        // Deletion (using key)
+    people.remove("Shawn");
+
+        // Traversal
+        // 1) Both Key & Value
+    for (key, val) in people.iter() {
+        println!("person: {}, age: {}", key, val);
+    }
+    
+        // 2) Only Keys
+    for person in people.keys() {
+        println!("person = {}", person);
+    }
+
+        // 3) Only Values
+    for age in people.values() {
+        println!("age = {}", age);
+    }
+
+    // Task 19b
+    let mut lockers = HashMap::new();
+    lockers.insert(1, Contents {
+        stud_id: 500032,
+        stud_name: "Vansh Chheda".to_owned()
+    });
+    lockers.insert(2, Contents {
+        stud_id: 500102,
+        stud_name: "Tanmay Thakkar".to_owned()
+    });
+    lockers.insert(3, Contents {
+        stud_id: 500085,
+        stud_name: "Vansh Chheda".to_owned()
+    });
+
+    for (locker_num, content) in lockers.iter() {
+        println!("LockerNo.: {:?}, StudentId: {:?}", locker_num, content);
+    }
+
+    // Task 20:
+        println!("\n---------TASK20---------");
+
+        // Task 20a:
+        fn maybe_num() -> Option<i32> { Some(32) }
+
+        fn maybe_word() -> Option<String> { Some("Success".to_owned()) } 
+
+            // let plus_one = match maybe_num {
+            //     Some(num) => Some(num + 1),
+            //     None => None,
+            // };
+
+            // Instead of doing the above, where you're getting a "Some(num)" and returning another "Some(num + 1)", do the following:
+
+            let plus_one = maybe_num().map(|num| num + 1);
+            // This will return the same thing if we get "Some()", else it wont store anything if we get "None"
+
+            // Chained Map
+            let word_length = maybe_word()
+                .map(|word| word.len())
+                .map(|len| len * 2)
+            // println!("{:?}", word_length); // THIS WILL STILL PRINT "Some(14)", and not just "14"
+            // Use Of "unwrap_or_default()"
+                .unwrap_or_default();
+                // With "unwrap_or_default()", if the value is "Some", it will be unwrapped and printed. If it's "None", it will return the default value for the type, which is 0 for integers
+                // Now print:
+                println!("Final value: {:?}", word_length);
+
+
+        // Task 20b:
+        let a: Option<i32> = Some(1);
+        let a_is_some = a.is_some(); // Returns "true" if the option is a 'Some value'.
+        let a_is_none = a.is_none(); // Returns "true" if the option is a 'None value'.
+        let a_mapped = a.map(|num| num + 1);
+        
+        let a_filtered = a.filter(|num| num == &1 ); // FILTER: if the Return value is True, we keep the Data, else throw it away (then the final Return value = "None").
+        // NOTE: in FILTER, it borrows the number, THUS, use "&" during comparison
+        println!("{:?}", a_filtered);
+
+        // Task 21:
+        println!("\n---------TASK21---------");
+        // a)
+        let mut nums = vec![1,2,3,4,5];
+        let plus_one: Vec<_> = nums
+                .iter()
+                .map(|num| num + 1)
+                .collect();
+        println!("{:?}", plus_one);
+
+        // b)
+        let nums = vec![1,2,3,4,5];
+        let trip_num: Vec<_> = nums
+                .iter()
+                .map(|num| num * 3)
+                .filter(|num| num > &10)
+                .collect();
+
+        println!("{:?}", trip_num);
+
+        // Task 22:
+        println!("\n---------TASK22---------");
+        let range = 1..=3;
+        let range = 1..3;
+
+        for num in range {
+            println!("{num:?}");
+        }
+
+        for ch in 'a'..='f' {
+            println!("{ch:?}");
+        }
+
+        // Task 23:
+        println!("\n---------TASK23---------");
+
+        // Task 23a:
+        let some_value = IntOption::Some(54);
+
+        if let IntOption::Some(value) = some_value {
+            println!("Value is: {value}");
+        }
+
+        let some_color = Colour::Red;
+
+        if let Colour::Red = some_color {
+            println!("its RED!");
+        } else {
+            println!("its NOT red!")
+        }
+
+        // Task 23b:
+        let mut some_data = Some(3);
+
+        while let Some(value) = some_data {
+            println!("loop");
+            some_data = None;
+        }
+        println!("done 01");
+
+        let some_nums = vec![1,2,3];
+        let mut num_iterator = some_nums.iter();
+
+        while let Some(value) = num_iterator.next() {
+            println!("num: {:?}", value);
+        }
+        println!("done 02");
+
+
 }
