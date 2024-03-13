@@ -11,6 +11,11 @@ This is a Multi-Line Comment */
 // Documentation Generation
 /// This is a Documentation Comment
 /// Education Qualification List
+
+mod player;
+mod item;
+mod game;
+
 enum Education {
     School(i32),
     College(i32),
@@ -66,5 +71,7 @@ fn main() {
     let myself = Student { name: "Vansh".to_owned(), yrs_exp: 2, qualification: Education::Undergrad(4) };
 
     println!("Total Exp : {}", myself.total_exp());
+
+    game::start();
 
 }
