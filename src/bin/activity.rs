@@ -503,6 +503,58 @@ fn arithmetic_op(a: i32, b: i32, c: &str) -> i32 {
 
 
 // ---------------------------------------------------
+    // Topic: Inline Modules
+    //
+    // Task 24:
+    // * Organize the code into two modules based on their functionality:
+        //   - msg: string formatting functions
+        //   - math: math functions
+    // * Update the main function to use the functionality from the modules
+    // * After moving the functions into modules, try running
+    //   `cargo check --bin a26b` to get a listing of required code changes
+    mod msg {
+        pub fn trim(msg: &str) -> &str {
+            msg.trim()
+        }
+        
+        pub fn capitalize(msg: &str) -> std::borrow::Cow<'_, str> {
+            if let Some(letter) = msg.get(0..1) {
+                format!("{}{}", letter.to_uppercase(), &msg[1..msg.len()]).into()
+            } else {
+                msg.into()
+            }
+        }
+        
+        pub fn exciting(msg: &str) -> String {
+            format!("{}!", msg)
+        }
+    }
+
+    mod math {
+        pub fn add(lhs: isize, rhs: isize) -> isize {
+            lhs + rhs
+        }
+        pub fn sub(lhs: isize, rhs: isize) -> isize {
+            lhs - rhs
+        }
+        pub fn mul(lhs: isize, rhs: isize) -> isize {
+            lhs * rhs
+        }
+    }
+
+// ---------------------------------------------------
+    // Topic: use of External Crates
+    //
+    // Task 25a:
+    use std::time::Duration; // A "Duration" type to represent a span of time, typically used for system timeouts.
+    use humantime::format_duration; // Formats duration into a human-readable string
+
+    // Task 25b:
+    // * Display the current date and time
+    // * Use the `chrono` crate to work with time
+    use chrono::prelude::*;
+
+// ---------------------------------------------------
 
 
 
@@ -1049,6 +1101,52 @@ fn main() {
             println!("num: {:?}", value);
         }
         println!("done 02");
+
+        // Task 24:
+        println!("\n---------TASK24---------");
+            // Part 1: math functions
+        // use math::*;
+        let result = {
+            let two_plus_two = math::add(2, 2);
+            let three = math::sub(two_plus_two, 1);
+            math::mul(three, three)
+        };
+    
+        // Ensure we have a correct result.
+        assert_eq!(result, 9);
+        println!("(2 + 2 - 1) * 3 = {}", result);
+
+        // Part 2: string functions
+        use msg::{trim, capitalize, exciting};
+        let hello = {
+            let msg = "hello ";
+            let msg = trim(msg);
+            capitalize(msg)
+        };
+        let world = {
+            let msg = "world";
+            exciting(msg)
+        };
+        let msg = format!("{}, {}", hello, world);
+
+        // Ensure we have a correct result.
+        assert_eq!(&msg, "Hello, world!");
+        println!("{}", msg);
+
+        // Task 25:
+        println!("\n---------TASK25---------");
+            // Task 25a:
+        let d = Duration::from_secs(9876);
+        println!("{:?}", d);
+        println!("{:?}", format_duration(d).to_string());
+
+            // Task 25b:
+        // Chrono provides a "DateTime" type to represent a date and a time in a timezone.
+        let dt: DateTime<Local> = Local::now(); // e.g. `2014-11-28T21:45:59.324310806+09:00`
+        println!("{:?}", dt);
+
+        // Formatting & Parsing
+        println!("{:?}", dt.format("%d-%m-%Y %H:%M:%S").to_string());
 
 
 }

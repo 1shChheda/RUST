@@ -830,3 +830,75 @@
 
     Advances the iterator and returns the next value. Returns "None" when iteration is finished.
 
+> Modules (Inline Modules) [ There are 2 types of Modules: "Inline" & "External" ]
+    -> useful to organize your code into logical units. They help in grouping related items together, such as structs, enums, traits, functions, and other modules.
+
+    _> SYNTAX:
+        mod greet {
+            fn hello() {
+                println!("hello");
+            }
+
+            fn goodbye() {
+                println!("goodbye");
+            }
+        }
+
+        mod math {
+            fn add(a: i32, b: i32) {
+                a + b
+            }
+
+            fn sub(a: i32, b: i32) {
+                a - b
+            }
+        }
+
+        fn main() {
+            // greet::hello(); // we use the word "greet" to access "hello" fn, since the "hello" fn lies in the "greet" mod
+
+            // if we have a lot of functions in the greet mod, then we can use:
+            use greet::*; // this makes all functions in greet mod available to use
+            hello();
+
+            math::add(1, 1);
+        }
+
+    -> NOTE: 
+        > each module can be thought of as its own file of source code.
+        > So, if we write "use std:collections::HashMap;" -> it'll be available only to the "main" function
+        > if you want to use HashMap in a "mod", you'll have to mention it separately within the module itself
+
+> Testing in Rust
+    -> In order to test any functions or code, we use Testing.
+    -> Steps:
+        > Create a "mod test{}"
+        > Add a testing macro "#[cfg(test)]" before mod. 
+            - This macro is specifically for testing.
+            - Basically, We're setting a configuration ("cfg") that mentions to use the module only in case of Testing.
+        > Write function codes in the mod, for different testings.
+        > Make sure to include "#[test]" before each function.
+            - This macro tells the compiler that this fnction is testing other code.
+        > Make use of "assert_eq!()" macro within this test function block.
+            - This macro takes in 3 arguments
+                -> 1st: the Value we want to check
+                -> 2nd: the Value that we're expecting
+                -> 3rd: a message that we can display if our test aborts, or doesnt work
+
+        > IMP: Remember to "use crate::*;" at the start of the "mod test" code (since we cant access functions outside the mod directly) 
+        { Do ya Remember? each module can be thought of as its own file of source code. }
+            - A crate refers to the entire collection of code in a particular file
+            - sO, we can use crate to access all functions (even the "fn main()") in the code file
+
+> External Crates ( Dependencies )
+    > These are packages or libraries developed by the Rust community or other developers that you can use in your Rust projects.
+    > To find such external crates, we can go to "crates.io" (Official Site) or "lib.rs" (UnOff Site) to explore available crates.
+        - BASICALLY like NPM site in Nodejs
+
+    > The "Cargo.toml" file in your Rust project is where you specify your project's dependencies. 
+        - You can add external crates to your project by listing them in the `[dependencies]` section of this file.
+    
+    > After adding dependencies to your Cargo.toml, you run "cargo build". 
+        - Cargo will download the specified crates from the central repository called crates.io and add them to your project.
+
+    > Once a crate is added to your project, you can import its modules and use its functionality in your code using the "use" keyword.

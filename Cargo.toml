@@ -6,3 +6,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+humantime = "2.1.0"
+chrono = "0.4.35"
+
+[lib]
+name = "simplegame"
+path = "src/simplegame/game.rs"

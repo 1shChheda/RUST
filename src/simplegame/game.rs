@@ -1,5 +1,8 @@
-use crate::player::Player;
-use crate::item::Item;
+mod player;
+mod item;
+
+pub use player::Player;
+pub use item::Item;
 
 pub fn start() {
     println!("\n\nWelcome to the Rust Adventure Game!");
