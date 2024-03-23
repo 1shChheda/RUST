@@ -555,7 +555,78 @@ fn arithmetic_op(a: i32, b: i32, c: &str) -> i32 {
     use chrono::prelude::*;
 
 // ---------------------------------------------------
+    // Topic: Gathering user input - IO
+    //
+    // Task 26a:
+    // * Create a simple User data IO, where user can enter data TWICE
+    use std::io;
 
+    fn get_input() -> io::Result<String> {
+        let mut buffer = String::new(); // a "buffer" is just some space set aside that some other functionality can operate with (here, en empty String initially)
+
+        io::stdin().read_line(&mut buffer)?;
+        // println!("You typed: {}", buffer.trim());
+        Ok(buffer.trim().to_owned()) // why "trim()"? To remove any unecessary spaces,"\n", etc
+    }
+
+    // Task 26b:
+    // * Verify user input against pre-defined keywords
+    // * The keywords represent possible power options for a computer:
+    //    * Off, Sleep, Reboot, Shutdown, Hibernate
+    // * If the user enters one of the keywords, a message should be printed to
+    //   the console indicating which action will be taken
+    //   * Example: If the user types in "shutdown" a message should display such
+    //     as "shutting down"
+    // * If the keyword entered does not exist, an appropriate error message
+    //   should be displayed
+
+    // Notes:
+        // * Use an enum to store the possible power states
+        // * Use a function with a match expression to print out the power messages
+        //   * The function should accept the enum as an input
+        // * Use a match expression to convert the user input into the power state enum
+        // * The program should be case-insensitive (the user should be able to type
+        //   Reboot, reboot, REBOOT, etc.)
+
+    enum PowerState {
+        Off,
+        Sleep, 
+        Reboot, 
+        Shutdown, 
+        Hibernate,
+    }
+
+    fn power_state_op(state: PowerState) {
+        match state {
+            PowerState::Off=> println!("switching off!"),
+            PowerState::Sleep=> println!("sleep mode activated!"), 
+            PowerState::Reboot=> println!("rebooting systems..."), 
+            PowerState::Shutdown=> println!("shutting down!"), 
+            PowerState::Hibernate=> println!("Hibernation unabled!"),
+            _ => println!("Error while recieving PowerState")
+        }
+    }
+
+    impl PowerState {
+
+        fn input_conversion_mapping(input: &str) -> Option<PowerState> {
+            let lower_input = input.trim().to_lowercase();
+
+            match lower_input.as_str() { 
+                    // why ".as_str()"? -> Since "lower_input" is of String type (since ".to_lowercase()" returns String) and in the match exp. we are comparing using &str type ("off", "sleep", etc are &str type)
+
+                "off" => Some(Self::Off),
+                "sleep" => Some(Self::Sleep),
+                "reboot" => Some(Self::Reboot),
+                "shutdown" => Some(Self::Shutdown),
+                "hibernate" => Some(Self::Hibernate),
+                _ => None,
+            }
+        }
+
+    }
+
+// ---------------------------------------------------
 
 
 fn main() {
@@ -921,7 +992,8 @@ fn main() {
         // What does "?" operator do?
             // It will check if the response is "Ok" or "Err"
             // if "Ok", then it will store the inner data in the variable
-            // if "Err", then it will return the Err value up the call stack (meaning: first to "pick_choice()", representing the String, and then to )
+            // if "Err", then it will return the Err value up the call stack (meaning: first to "pick_choice()", representing the String, and then to "get_choice()")
+    
     
     // pick_choice("start"); // This will only handle Successful cases
 
@@ -1148,5 +1220,32 @@ fn main() {
         // Formatting & Parsing
         println!("{:?}", dt.format("%d-%m-%Y %H:%M:%S").to_string());
 
+        // Task 26:
+        println!("\n---------TASK26---------");
+
+            // Task 26a:
+        let mut all_input = vec![]; // empty vec, we'll add input into it, using "get_input()" fn
+        let mut input_times = 0;
+        while input_times < 2 {
+            println!("Provide Data: ");
+            if let Ok(data) = get_input() {
+                all_input.push(data);
+                input_times += 1;
+            } else {
+                println!("Oops, error occured!");
+            }
+        }
+
+        for input in all_input {
+            println!("Recieved Data: {:?}", input);
+        }
+
+            // Task 26b:
+        let mut power_state_cmd = get_input();
+        let converted_power_state = PowerState::input_conversion_mapping(&power_state_cmd.unwrap_or_default());
+
+        if let Some(power_state) = converted_power_state {
+            power_state_op(power_state);
+        }
 
 }

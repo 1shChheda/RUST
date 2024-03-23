@@ -902,3 +902,19 @@
         - Cargo will download the specified crates from the central repository called crates.io and add them to your project.
 
     > Once a crate is added to your project, you can import its modules and use its functionality in your code using the "use" keyword.
+
+> Gathering input data | I/O
+    >   use std::io;
+        fn get_input() -> io::Result<String> {
+                // Note: usually, we provide 2 arguments in "Result" type, Success & Error, but "io"s provides a special Result type, that already has Error type defined for us
+
+            let mut buffer = String::new(); // a "buffer" is just some space set aside that some other functionality can operate with (here, en empty String initially)
+
+            io::stdin().read_line(&mut buffer)?; 
+                // "stdin" gives you access to the terminal, so you can get user input(CLI)
+                // "read_line(&mut buffer)" will read a line from the input and save it into the borrowed mutable buffer
+            println!("You typed: {}", buffer.trim());
+            Ok(())
+        }
+
+> 

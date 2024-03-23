@@ -1,4 +1,4 @@
-use crate::item::Item;
+use crate::item::Item; // IMP: here "crate" refers to game.rs file, since we've mentioned the file hierarchy in Cargo.toml
 
 pub struct Player {
     pub name: String,

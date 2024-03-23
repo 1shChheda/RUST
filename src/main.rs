@@ -12,7 +12,7 @@ This is a Multi-Line Comment */
 /// This is a Documentation Comment
 /// Education Qualification List
 
-// use crate::simplegame::game;
+// use crate::simplegame::game; // No need to use now.
 
 enum Education {
     School(i32),
